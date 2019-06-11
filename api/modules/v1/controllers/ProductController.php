@@ -13,7 +13,7 @@ class ProductController extends ActiveController {
      public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
-            'class' => HttpBasicAuth::className(),
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
             'except' => [],
         ];
         $behaviors['access'] = [
