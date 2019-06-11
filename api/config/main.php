@@ -46,7 +46,6 @@ return [
             'charset' => 'UTF-8',
             'on beforeSend' => function ($event) {
                 $response = $event->sender;
-                
                 if($response->data['status']==404 && $response->data['type']=='yii\web\NotFoundHttpException'){     
                     $response->data=[
                         "code"=> 403,//$response->data['code'],
