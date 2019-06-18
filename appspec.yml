@@ -2,6 +2,17 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/html/advproducts/
-    overwrite: true
-
+    destination: /var/www/html/advproducts
+permissions:
+  - object: /var/www/html/advproducts
+    pattern: "**"
+    owner: ec2-user
+    group: apache
+    mode: 775
+    type:
+      - file	
+hooks:
+  AfterInstall:
+    - location: ./change_permissions.sh
+      timeout: 300
+      runas: root
