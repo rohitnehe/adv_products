@@ -34,7 +34,7 @@
             "enabled": false
         }
     },
-    "repositories": [
+     "repositories": [
         {
             "type": "composer",
             "url": "https://asset-packagist.org"

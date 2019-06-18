@@ -17,7 +17,7 @@ services:
     ports:
       - 21080:80
     volumes:
-      # Re-use local composer cache via host-volume
+      # Re-uselocal composer cache via host-volume
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       # Mount source-code for development
       - ./:/app
