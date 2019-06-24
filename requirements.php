@@ -64,7 +64,7 @@ if (extension_loaded('gd')) {
     }
 }
 
-/**
+ /**
  * Adjust requirements according to your application specifics.
  */
 $requirements = array(
