@@ -1,6 +1,6 @@
 <?php
 /**
- * Application requirement checker script.
+ * Application  requirement checker script.
  *
  * In order to run this script use the following console command:
  * php requirements.php
@@ -64,7 +64,7 @@ if (extension_loaded('gd')) {
     }
 }
 
-/**
+ /**
  * Adjust requirements according to your application specifics.
  */
 $requirements = array(
