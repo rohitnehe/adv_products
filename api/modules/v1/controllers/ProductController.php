@@ -71,7 +71,7 @@ class ProductController extends ActiveController {
         $modelClass = $this->modelClass;
         $data = $modelClass::find()->Where(['=', 'growers_id', $cur_growers_id])->andWhere(['=', 'growpoint_external_id', $id])->asArray()->all();  //id is growpoint_external_id for  product
         if(!empty($data)){
-            $response_fields=array('external_id','botanical_name','common_name','other_name','productgroup1','productgroup2','productgroup3','productgroup4','productgroup5'); 
+            $response_fields=array('external_id',/*'botanical_name'*/,'common_name','other_name','productgroup1','productgroup2','productgroup3','productgroup4','productgroup5'); 
             $data=  \RestHelper::apiResponseFeildsArr($data,$response_fields);
             return \RestHelper::formatResponseSuccess('6e922e50-cd09-43d1-8153-051004a708d4', $data);
         }else{            
