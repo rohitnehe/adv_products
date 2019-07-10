@@ -46,7 +46,6 @@ class BaseModel extends ActiveRecord {
     const ORDER_TYPE_QUOTE = 'Quote';
     
     /**
-     * @date : 04-June-2019
      * @purpose : To get status label by there value. 
      * @return string
      */
@@ -59,10 +58,8 @@ class BaseModel extends ActiveRecord {
     }
     
     /**
-     * @author Niranjan Patil <niranjanpatil@benchmarkitsolutions.com>
      * @purpose get Verification Status by its value.
      * @return string
-     * @Date 26 APR 2019
      */
     public function findVerificationStatus(){
         if ($this->is_verified == 0) {

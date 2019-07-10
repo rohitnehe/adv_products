@@ -204,14 +204,6 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
      * <@Date -: 04-June-2019> 
      * @return type
      */
-    // public function getStates() {
-    //     return $this->hasOne(States::className(), ['id' => 'state_id']);
-    // }
-
-    /**
-     * <@Date -: 04-June-2019> 
-     * @return type
-     */
     public function getStateName() {
         return $this->states->name;
     }
@@ -238,12 +230,6 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
         return $this->getAuthKey() === $authKey;
     }
 
-    /**
-     * <@Date -: 04-June-2019> 
-     * @param type $id
-     */
-    // public static function findIdentity($id) {
-    // }
     /**
      * @inheritdoc
      * loginform method take in user as identity class is now User
@@ -298,8 +284,6 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
     }
 
     /**
-     * <@author Ravina Surve. <ravinasurve@benchmarkitsolutions.com>
-     * <@Date -: 04-June-2019>
      * @purpose Function to getting states to show dropdown List.     
      * @return type $states
      */
@@ -308,51 +292,6 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
         return $states = \yii\helpers\ArrayHelper::map(States::find()->where(['is_deleted' => '0'])->all(), 'id', 'name');
     }
 
-    /**
-     * <@author Ravina Surve <ravinasurve@benchmarkitsolutions.com>
-     * <@Date -: 04-June-2019>
-     * @purpose : Validating entered email is exists or not. 
-     * @param type $attribute
-     * @param type $params    
-     */
-    public function user_exists($attribute, $params) {
-        if (isset($this->id)) {
-            //for  updating record
-            $user = User::find()
-                    ->andWhere(['<>', 'id', $this->id])
-                    ->andWhere(['email' => $this->email])
-                    ->one();
-        } else {
-            $user = User::findOne([
-                        'email' => $this->email,
-            ]);
-        }
-        if ($user) {
-            $this->addError($attribute, 'Entered email already exists in the system.');
-        }
-    }
-
-    /**
-     * <@author Ravina Surve <ravinasurve@benchmarkitsolutions.com>
-     * <@Date -: 04-June-2019>
-     * <@Description -: get UserInfo relation.>
-     * @return type
-     */
-    public function getUserInfo() {
-        return $this->hasOne(\common\models\UsersInfo::className(), ['users_id' => 'id']);
-    }
-
-    /**
-     * <@author Ravina Surve <ravinasurve@benchmarkitsolutions.com>
-     * <@Date -: 04-June-2019>
-     * <@Description -: check old password.>
-     * @return type
-     */
-    public function isoldpasswordCorrect($attribute, $params) {
-        if (!password_verify($this->$attribute, \Yii::$app->user->getIdentity()['password_hash'])) {
-            $this->addError($attribute, 'You have entered incorrect old Password');
-        }
-    }
 
     /**
      * <@author Ravina Surve <ravinasurve@benchmarkitsolutions.com>
@@ -383,8 +322,6 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
     }
 
     /**
-     * <@author Ravina Surve <ravinasurve@benchmarkitsolutions.com>
-     * <@Date -: 04-June-2019>
      * <@Description -: get user list of name and id depends on type.>
      * @return type
      */
@@ -394,76 +331,14 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
     }
     
     /**
-     * <@author Nikhil Bhagunde <nikhilbhagunde@benchmarkitsolutions.com>
-     * <@Date -: 04-June-2019>
      * <@Description -: fetch, Activity Log Relation.>
      * @return type
      */
     public function getActivityLogs() {
         return $this->hasMany(ActivityLog::className(), ['users_id' => 'id'])->nondeleted();
     }
-
-    /**
-     * <@author Bhushan Amane <bhushanamane@benchmarkitsolutions.com>
-     * <@Date -: 04-June-2019>
-     * @purpose : to deactivate child records after deactivate parent 
-     * @param type $id
-     * @param type $type    
-     */
-    public static function setDeactivateChilds($id, $type) {
-      //for updating record      
-        if ($type == "GA" || $type == "CA") {
-            $user = User::find()
-                    ->where(['=', 'ref_user_id', $id])
-                    ->andWhere(['=', 'inactive_after_parent', User::INACTIVE_AFTER_PARENT])
-                    ->andWhere(['=', 'status', User::STATUS_ACTIVE])
-                    ->all();
-
-            foreach ($user as $models) {
-                $user_data = User::findOne(['id' => $models->id]);
-                $user_data->inactive_after_parent = User::ACTIVE_AFTER_PARENT;
-                $user_data->status = User::STATUS_INACTIVATE;
-                $user_data->save(false);
-            }
-        }
-       // \CHelper::debug($model->growerRel);
-        if($type == "SAL"){ 
-           return true; 
-        }
-    }
-
-    /**
-     * <@author Bhushan Amane <bhushanamane@benchmarkitsolutions.com>
-     * <@Date -: 04-June-2019>
-     * @purpose : to activate child records after activate parent 
-     * @param type $id
-     * @param type $type    
-     */
-    public static function setActivateChilds($id, $type) {
-        //for  updating record
-        if ($type == "GA" || $type == "CA") {
-            $user = User::find()
-                    ->where(['=', 'ref_user_id', $id])
-                    ->andWhere(['=', 'inactive_after_parent', User::ACTIVE_AFTER_PARENT])
-                    ->andWhere(['=', 'status', User::STATUS_INACTIVATE])
-                    ->all();
-
-            foreach ($user as $models) {
-                $user_data = User::findOne(['id' => $models->id]);
-                $user_data->inactive_after_parent = User::INACTIVE_AFTER_PARENT;
-                $user_data->status = User::STATUS_ACTIVE;
-                $user_data->save(false);
-            }
-        }
-        // \CHelper::debug($model->growerRel);
-        if($type == "SAL"){ 
-                return true; 
-        }
-    }
     
     /**
-     * @author Niranjan Patil <niranjanpatil@benchmarkitsolutions.com>
-     * @Date -: 04-June-2019
      * @purpose : find user by grow point external id 
      * @param type $id
      * @param type $type    
@@ -476,42 +351,7 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
     public static function findIdentityOfUser($id) {
         return static::findOne($id);
     }
-    /**
-     * @author Ravina surve <ravinasurve@benchmarkitsolutions.com>
-     * @Date -: 9 jan 2019
-     * @purpose : get user's user_type,ref_user_id,status   
-     */
-    public static function getUserStatusAndParent($id) {
-        return static::find()->select(['user_type','status','ref_user_id'])->where(['id' => $id,'is_deleted' => self::STATUS_NOT_DELETED])->one();
-       
-    }
-     /**
-     * <@author Kumar Waghmode <kumarwaghmode@benchmarkitsolutions.com>
-     * <@Date -: 14Jan2019>
-     * @purpose : Validating entered growpoint external id  is exists or not. 
-     * @param type $attribute
-     * @param type $params    
-     */
-   public function grower_exid_exists($attribute, $params) {
-        if (isset($this->id)) {
-            //for  updating record
-            $user = User::find()
-                    ->andWhere(['<>', 'id', $this->id])
-                    ->andWhere(['growpoint_external_id' => $this->growpoint_external_id])
-                    ->one();
-        } else {
-            $user = User::findOne([
-                        'status' => User::STATUS_ACTIVE,
-                        'growpoint_external_id' => $this->growpoint_external_id,
-            ]);
-        }
-        if ($user) {
-            $this->addError($attribute, 'Entered Growpoint External Key already exists in the system.');
-        }
-    }
-    /*
-     * End
-     */
+
     /**
      * <@author Kumar Waghmode <kumarwaghmode@benchmarkitsolutions.com>
      * <@Date -: 14Jan2019>
@@ -541,24 +381,6 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
      */
     
     
-    /**
-     * <@author Bhushan Amane <bhushanamane@benchmarkitsolutions.com>
-     * <@Date -: 14Jan2019>
-     * @purpose : Validating entered license_key  is exists or not. 
-     * @param type $attribute
-     * @param type $params    
-     */
-     public function getUserCounts() {
-        $query = (new Query())->select(
-                        'SUM(case when user_type = "GA" AND status="A" then 1 else 0 end) grower_count,
-                SUM(case when user_type = "CA" AND status="A" then 1 else 0 end) customer_count,
-                SUM(case when user_type = "SAL" AND status="A" then 1 else 0 end) sales_count'
-                )->from('tbl_users');
-        $query->join('INNER JOIN','tbl_users_info','tbl_users_info.users_id=tbl_users.id');
-        $openOrderData = $query->one();
-        return $openOrderData;
-    }
-    
     
     public static function findSuperadminEmail() 
     {
@@ -567,8 +389,6 @@ class User extends BaseModel implements \yii\web\IdentityInterface {
     }
     
     /**
-     * @author Niranjan Patil <niranjanpatil@benchmarkitsolutions.com>
-     * @date : 1 APR 2019
      * @purpose check email exist in user table and return error with user type
      * @return type
      */

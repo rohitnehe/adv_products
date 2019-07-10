@@ -110,7 +110,7 @@ class Products extends \common\models\BaseModel
     }
     
     /**
-     * Created By: Prasad Bhale
+    
      * @desc get Product and Item relation
      */
     public function getItems() {
