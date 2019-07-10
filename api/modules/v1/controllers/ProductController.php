@@ -40,7 +40,6 @@ class ProductController extends ActiveController {
     }  
     
     /**
-     * @author Kumar Waghmode <kumarwaghmode@benchmarkitsolutions.com>
      * @date : 04-June-2019
      * This Action is Used To return list of all products associated with logged in grower. 
      */
@@ -62,10 +61,9 @@ class ProductController extends ActiveController {
      **/
     
     /**
-     * @author Kumar Waghmode <kumarwaghmode@benchmarkitsolutions.com>
      * @date : 04-June-2019
      * This Action is Used To return products with given product external id
-     */
+     
     public function actionView($id=NULL) {
         $cur_growers_id = \CHelper::getUserIdentityData('id');          
         $modelClass = $this->modelClass;
@@ -77,65 +75,7 @@ class ProductController extends ActiveController {
         }else{            
              return \RestHelper::formatResponseError('cb7d9164-9ac0-4390-a3c7-2a6ff63171c5', $data);
         }
-    }
+    }*/
     
-    /**
-     * @author Kumar Waghmode <kumarwaghmode@benchmarkitsolutions.com>
-     * @date : 10 Dec. 2018
-     * Purpose: This Acion is Used To create & update products and return list of created, updated & failure products to api.
-     */
-    public function actionCreate() {
-        $cur_growers_id = \CHelper::getUserIdentityData('id');
-        $cur_growers_data = \CHelper::getUserIdentityData();
-        $modelClass = $this->modelClass;
-        $model = new $modelClass;
-        $data = array();
-        $params = Yii::$app->request->bodyParams;
-
-        $productModel = $modelClass::find()->where(['=', 'growers_id', $cur_growers_id])->andWhere(['=', 'growpoint_external_id', $params['external_id']])->one();
-
-        if (!empty($params) && empty($productModel)) {
-            $model->growers_id = $cur_growers_id;
-            $model->growpoint_external_id = $params['external_id'];
-            $model->botanical_name = $params['botanical_name'];
-            $model->common_name = $params['common_name'];
-            $model->other_name = $params['other_name'];
-            $model->productgroup1 = $params['productgroup1'];
-            $model->productgroup2 = $params['productgroup2'];
-            $model->productgroup3 = $params['productgroup3'];
-            $model->productgroup4 = $params['productgroup4'];
-            $model->productgroup5 = $params['productgroup5'];
-            if ($model->save()) {
-                $data['module'] = "Product";
-                $data['log_type'] = "Created";
-                $data['message'] = "Product created successfully";
-                return \RestHelper::formatResponseSuccess('6e922e50-cd09-43d1-8153-051004a708d4', $data);
-            } else {
-                return \RestHelper::formatResponseError('cb7d9164-9ac0-4390-a3c7-2a6ff63171c5', $data);
-            }
-        } else {
-            if (!empty($params)) {
-                $productModel->botanical_name = $params['botanical_name'];
-                $productModel->common_name = $params['common_name'];
-                $productModel->other_name = $params['other_name'];
-                $productModel->productgroup1 = $params['productgroup1'];
-                $productModel->productgroup2 = $params['productgroup2'];
-                $productModel->productgroup3 = $params['productgroup3'];
-                $productModel->productgroup4 = $params['productgroup4'];
-                $productModel->productgroup5 = $params['productgroup5'];
-                if ($productModel->save()) {
-                    $data['module'] = "Product";
-                    $data['log_type'] = "Updated";
-                    $data['message'] = "Product updated successfully";
-                    return \RestHelper::formatResponseSuccess('6e922e50-cd09-43d1-8153-051004a708d4', $data);
-                }
-            }
-        }
-        return \RestHelper::formatResponseError('cb7d9164-9ac0-4390-a3c7-2a6ff63171c5', $data);
-    }
-
-    /**
-    * End 
-    **/
 }
 
